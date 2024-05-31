@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private CustomInput input = null;
     private Vector3 moveVector = Vector3.zero;
     private Rigidbody rigidbody = null;
-    private float speed = 1.5f;
+    private float speed = 4.0f;
 
     private void Awake()
     {
