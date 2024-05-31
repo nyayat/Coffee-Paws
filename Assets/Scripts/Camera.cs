@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    public GameObject player;
-    private Vector3 originalPosition;
+    private Vector3 offset = new Vector3(0f, 1.5f, -3f);
+    private float smoothTime = 0.2f;
+    private Vector3 velocity = Vector3.zero;
 
+    [SerializeField] private Transform target;
 
-    // Start is called before the first frame update
-    void Start()
+    private void FixedUpdate()
     {
-        originalPosition = this.transform.position;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        this.transform.position = player.transform.position + originalPosition;
+        Vector3 targetPosition = target.position + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
 }

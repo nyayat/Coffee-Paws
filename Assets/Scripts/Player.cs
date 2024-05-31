@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(moveVector);
+        //Debug.Log(moveVector);
         Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position+moveVector, Time.fixedDeltaTime * speed);
         rigidbody.MovePosition(smoothedDelta);
     }
