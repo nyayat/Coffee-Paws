@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     private Vector3 moveVector = Vector3.zero;
     private Rigidbody rigidbody = null;
     private float speed = 4.0f;
+    private GameObject interactiveGameObject = null;
+    private float heightPlayer = 0f;
+    private bool isMoving = false;
 
     private void Awake()
     {
@@ -16,6 +19,18 @@ public class Player : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        heightPlayer = transform.localScale.y;
+    }
+
+    private void Update()
+    {
+        if(isMoving)
+        {
+            moveObject();
+        }
+    }
     private void OnEnable()
     {
         input.Enable();
@@ -47,15 +62,27 @@ public class Player : MonoBehaviour
     {
         moveVector = Vector3.zero;
     }
-    /*// Start is called before the first frame update
-    void Start()
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.tag == "Food")
+            interactiveGameObject = other.gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
-        
-    }*/
+        interactiveGameObject = null;
+    }
+
+    public void OnPickUp(InputAction.CallbackContext ctx)
+    {
+        if(ctx.performed && interactiveGameObject != null)
+            isMoving = true;
+    }
+
+    /* *** ACTION ON OTHER *** */
+    private void moveObject()
+    {
+        interactiveGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + heightPlayer, transform.position.z);
+    }
 }
