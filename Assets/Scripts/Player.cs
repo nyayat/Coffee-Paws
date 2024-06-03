@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     private CustomInput input = null;
     private Vector3 moveVector = Vector3.zero;
+    private Vector3 lastMoveVector = Vector3.zero;
     private Rigidbody rigidbody = null;
     private float speed = 4.0f;
     private GameObject interactiveGameObject = null;
@@ -24,13 +25,17 @@ public class Player : MonoBehaviour
         heightPlayer = transform.localScale.y;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position+moveVector, Time.fixedDeltaTime * speed);
+        rigidbody.MovePosition(smoothedDelta);
+
         if(isMoving)
         {
             moveObject();
         }
     }
+
     private void OnEnable()
     {
         input.Enable();
@@ -45,17 +50,11 @@ public class Player : MonoBehaviour
         input.Player.Move.canceled -= MoveCanceled;
     }
 
-    private void FixedUpdate()
-    {
-        //Debug.Log(moveVector);
-        Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position+moveVector, Time.fixedDeltaTime * speed);
-        rigidbody.MovePosition(smoothedDelta);
-    }
-
     private void MovePerformed(InputAction.CallbackContext value)
     {
         Vector2 direction = value.ReadValue<Vector2>();
         moveVector = new Vector3(direction.x, 0, direction.y);
+        lastMoveVector = moveVector;
     }
 
     private void MoveCanceled(InputAction.CallbackContext value)
@@ -65,7 +64,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Food")
+        if(other.tag == "Food" && interactiveGameObject == null)
             interactiveGameObject = other.gameObject;
     }
 
@@ -77,7 +76,21 @@ public class Player : MonoBehaviour
     public void OnPickUp(InputAction.CallbackContext ctx)
     {
         if(ctx.performed && interactiveGameObject != null)
-            isMoving = true;
+        {
+            if(!isMoving)
+            {
+                isMoving = true;
+            }
+            else
+            {
+                isMoving = false;
+                float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
+                interactiveGameObject.transform.position += lastMoveVector * distance;
+                Vector3 pos = interactiveGameObject.transform.position;
+                pos.y = 1 + interactiveGameObject.transform.localScale.y;
+                interactiveGameObject.transform.position = pos;
+            }
+        }
     }
 
     /* *** ACTION ON OTHER *** */
