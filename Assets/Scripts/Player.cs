@@ -62,15 +62,19 @@ public class Player : MonoBehaviour
         moveVector = Vector3.zero;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if(other.tag == "Food" && interactiveGameObject == null)
+        {
+            Debug.Log(other.name);
             interactiveGameObject = other.gameObject;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        interactiveGameObject = null;
+        if(!isMoving)
+            interactiveGameObject = null;
     }
 
     public void OnPickUp(InputAction.CallbackContext ctx)

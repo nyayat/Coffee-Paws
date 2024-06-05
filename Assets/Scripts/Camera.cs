@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    private Vector3 offset = new Vector3(0f, 1.5f, -3f);
-    private float smoothTime = 0.2f;
+    private Vector3 offset = new Vector3(0f, 3.5f, -4f);
+    private float smoothTime = 0.1f;
     private Vector3 velocity = Vector3.zero;
 
     [SerializeField] private Transform target;
