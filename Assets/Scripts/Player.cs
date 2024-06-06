@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
+    public GameObject[] prefabsDataBase;
+    public GameObject food;
     private CustomInput input = null;
     private Vector3 moveVector = Vector3.zero;
     private Vector3 lastMoveVector = Vector3.zero;
@@ -13,6 +16,7 @@ public class Player : MonoBehaviour
     private GameObject interactiveGameObject = null;
     private float heightPlayer = 0f;
     private bool isMoving = false;
+    private GameObject prefab = null;
 
     private void Awake()
     {
@@ -62,37 +66,65 @@ public class Player : MonoBehaviour
         moveVector = Vector3.zero;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Food" && interactiveGameObject == null)
+        Debug.Log("Player enter in " + other.name);
+        switch (other.tag)
         {
-            Debug.Log(other.name);
-            interactiveGameObject = other.gameObject;
+            case "Food":
+                if(interactiveGameObject == null)
+                    interactiveGameObject = other.gameObject;
+                break;
+            case "Box":
+                prefab = prefabsDataBase.FirstOrDefault(p => p.name == other.name);
+                if (prefab == null)
+                    Debug.LogWarning("Prefab with name " + other.tag + " not found in prefabs array.");
+                break;
+            case "Mix":
+            default:
+                break;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(!isMoving)
+        Debug.Log("Player exit in " + other.name);
+        if(!isMoving && interactiveGameObject != null)
+        {
+            Debug.Log("Object null " + interactiveGameObject.name);
             interactiveGameObject = null;
+            prefab = null;
+        }
     }
 
     public void OnPickUp(InputAction.CallbackContext ctx)
     {
-        if(ctx.performed && interactiveGameObject != null)
+        if(ctx.performed)
         {
-            if(!isMoving)
+            // To create a prefab
+            if(prefab != null && interactiveGameObject == null)
             {
-                isMoving = true;
+                interactiveGameObject = Instantiate(prefab);
+                interactiveGameObject.transform.SetParent(food.transform);
             }
-            else
+
+            if(interactiveGameObject != null)
             {
-                isMoving = false;
-                float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
-                interactiveGameObject.transform.position += lastMoveVector * distance;
-                Vector3 pos = interactiveGameObject.transform.position;
-                pos.y = 1 + interactiveGameObject.transform.localScale.y;
-                interactiveGameObject.transform.position = pos;
+                if(!isMoving)
+                {
+                    isMoving = true;
+                }
+                else
+                {
+                    isMoving = false;
+                    float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
+                    interactiveGameObject.transform.position += lastMoveVector * distance;
+                    Vector3 pos = interactiveGameObject.transform.position;
+                    pos.y = 1 + interactiveGameObject.transform.localScale.y;
+                    interactiveGameObject.transform.position = pos;
+                    prefab = null;
+                    interactiveGameObject = null;
+                }
             }
         }
     }
