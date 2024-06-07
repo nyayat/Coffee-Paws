@@ -6,8 +6,10 @@ using System.Linq;
 
 public class Player : MonoBehaviour
 {
+    /* *** PUBLIC *** */
     public GameObject[] prefabsDataBase;
     public GameObject food;
+    /* *** PRIVATE *** */
     private CustomInput input = null;
     private Vector3 moveVector = Vector3.zero;
     private Vector3 lastMoveVector = Vector3.zero;
@@ -77,10 +79,11 @@ public class Player : MonoBehaviour
                 break;
             case "Box":
                 prefab = prefabsDataBase.FirstOrDefault(p => p.name == other.name);
+                Debug.Log("Prefab found " + prefab.name);
                 if (prefab == null)
                     Debug.LogWarning("Prefab with name " + other.tag + " not found in prefabs array.");
                 break;
-            case "Mix":
+            case "Machine":
             default:
                 break;
         }
