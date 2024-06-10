@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 967064159}
   - component: {fileID: 967064158}
   - component: {fileID: 967064163}
+  - component: {fileID: 967064165}
   - component: {fileID: 967064161}
   - component: {fileID: 967064162}
   - component: {fileID: 967064164}
@@ -910,6 +911,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b6c5c04a812f24c9cb3e26bb26d2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabsDataBase:
+  - {fileID: 9205575496180014194, guid: 0ce5635ac68c67e48841aefbee03ec05, type: 3}
+  - {fileID: 4136934413817676754, guid: 6b45be1725d64ea4fabba68d037d4675, type: 3}
+  food: {fileID: 1661313147}
 --- !u!54 &967064162
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1008,6 +1013,27 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!65 &967064165
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967064156}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.1, z: 0.3}
 --- !u!1 &1049007772
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,7 +1159,7 @@ GameObject:
   - component: {fileID: 1449694358}
   m_Layer: 0
   m_Name: Mix
-  m_TagString: Untagged
+  m_TagString: Machine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1147,7 +1173,7 @@ Transform:
   m_GameObject: {fileID: 1449694356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.39, y: 7.08, z: -7.45}
+  m_LocalPosition: {x: -13.39, y: 7.08, z: -5.89}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []

@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private float heightPlayer = 0f;
     private bool isMoving = false;
     private GameObject prefab = null;
+    private Machine machine = null;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class Player : MonoBehaviour
 
         if(isMoving)
         {
-            moveObject();
+            MoveObject();
         }
     }
 
@@ -84,6 +85,8 @@ public class Player : MonoBehaviour
                     Debug.LogWarning("Prefab with name " + other.tag + " not found in prefabs array.");
                 break;
             case "Machine":
+                machine = other.gameObject.GetComponent<Machine>();
+                break;
             default:
                 break;
         }
@@ -92,18 +95,26 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Debug.Log("Player exit in " + other.name);
+        // if a player have not an object in hand
         if(!isMoving && interactiveGameObject != null)
         {
             Debug.Log("Object null " + interactiveGameObject.name);
             interactiveGameObject = null;
             prefab = null;
         }
+        if(machine != null)
+            machine = null;
     }
 
     public void OnPickUp(InputAction.CallbackContext ctx)
     {
         if(ctx.performed)
         {
+            if(machine != null)
+            {
+                UseMachine();
+                return;
+            }
             // To create a prefab
             if(prefab != null && interactiveGameObject == null)
             {
@@ -133,8 +144,22 @@ public class Player : MonoBehaviour
     }
 
     /* *** ACTION ON OTHER *** */
-    private void moveObject()
+    private void MoveObject()
     {
         interactiveGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + heightPlayer, transform.position.z);
+    }
+
+    private void UseMachine()
+    {
+        Debug.Log("Use machine");
+        if(isMoving)
+        {
+            machine.PutIngredient(interactiveGameObject);
+            isMoving = false;
+        }
+        else
+        {
+            machine.ReadIngredients();
+        }
     }
 }
