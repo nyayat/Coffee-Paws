@@ -24,7 +24,7 @@ public class Machine : MonoBehaviour
     public void PutIngredient(GameObject ingredient)
     {
         string ingredientName = ingredient.name.Replace("(Clone)", "").Trim();
-        Debug.Log("You put " + ingredient.name);
+        Debug.Log("You put " + ingredientName + " in the machine");
         ingredients.Add(ingredientName);
         Destroy(ingredient);
     }

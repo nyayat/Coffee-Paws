@@ -138,7 +138,8 @@ public class Player : MonoBehaviour
         float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
         interactiveGameObject.transform.position += lastMoveVector * distance;
         Vector3 pos = interactiveGameObject.transform.position;
-        pos.y = 1 + interactiveGameObject.transform.localScale.y;
+        //pos.y = interactiveGameObject.transform.localScale.y;
+        pos.y = 1.2f;
         interactiveGameObject.transform.position = pos;
         DeleteObject();
     }
