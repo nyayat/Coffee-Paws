@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
         switch (other.tag)
         {
             case "Food":
+            case "Recipe":
                 if(interactiveGameObject == null)
                     interactiveGameObject = other.gameObject;
                 break;

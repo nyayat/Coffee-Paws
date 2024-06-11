@@ -73,8 +73,6 @@ public class Machine : MonoBehaviour
             bool allIngredientsMatch = true;
             foreach (string oneIngredient in requiredIngredients)
             {
-                Debug.Log("THE TRUTH" + oneIngredient);
-                Debug.Log("THE TRUTH" + ingredients[0]);
                 if (!ingredients.Contains(oneIngredient))
                 {
                     allIngredientsMatch = false;
