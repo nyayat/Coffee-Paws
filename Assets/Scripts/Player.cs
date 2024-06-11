@@ -117,10 +117,7 @@ public class Player : MonoBehaviour
             }
             // To create a prefab
             if(prefab != null && interactiveGameObject == null)
-            {
-                interactiveGameObject = Instantiate(prefab);
-                interactiveGameObject.transform.SetParent(food.transform);
-            }
+                CreatePrefab(food);
 
             if(interactiveGameObject != null)
             {
@@ -154,12 +151,29 @@ public class Player : MonoBehaviour
         Debug.Log("Use machine");
         if(isMoving)
         {
-            machine.PutIngredient(interactiveGameObject);
+            if(string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
+                machine.UseTrash(interactiveGameObject);
+            else
+                machine.PutIngredient(interactiveGameObject);
             isMoving = false;
         }
         else
         {
             machine.ReadIngredients();
+            if(machine.UseMachine())
+            {
+                interactiveGameObject = null;
+                prefab = machine.PickUpRecipe();
+                machine.ClearMachine();
+                CreatePrefab(food);
+                isMoving = true;
+            }
         }
+    }
+
+    void CreatePrefab(GameObject parent)
+    {
+            interactiveGameObject = Instantiate(prefab);
+            interactiveGameObject.transform.SetParent(parent.transform);
     }
 }

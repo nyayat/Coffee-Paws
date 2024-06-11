@@ -23,8 +23,9 @@ public class Machine : MonoBehaviour
 
     public void PutIngredient(GameObject ingredient)
     {
+        string ingredientName = ingredient.name.Replace("(Clone)", "").Trim();
         Debug.Log("You put " + ingredient.name);
-        ingredients.Add(ingredient.name);
+        ingredients.Add(ingredientName);
         Destroy(ingredient);
     }
 
@@ -36,8 +37,9 @@ public class Machine : MonoBehaviour
         }
     }
 
-    /*void UseMachine()
+    public bool UseMachine()
     {
+        recipe = null;
         // Lire le fichier CSV
         string[] lines = File.ReadAllLines(csvFilePath);
 
@@ -50,33 +52,74 @@ public class Machine : MonoBehaviour
             if (parts.Length < 3)
                 throw new System.Exception("Invalid line in CSV: " + line);
 
-            // Get the machine name, ingredients, and recipe
-            if(parts[0].Trim() != this.gameObject.name)
+            // Go to another line if it's not the right machine in the CSV
+            if (parts[0].Trim() != this.gameObject.name)
+            {
+                Debug.Log("Machine name does not match.");
                 continue;
+            }
 
             string[] requiredIngredients = parts[1].Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
             string recipeName = parts[2].Trim();
 
-            // Check if the ingredients match
-            bool allIngredientsMatch = false;
-
-            if(requiredIngredients.Length == ingredients.Count)
+            // Check if the number of ingredients match
+            if (requiredIngredients.Length != ingredients.Count)
             {
-                foreach (string oneIngredient in requiredIngredients)
+                Debug.Log("Wrong number of ingredients for recipe");
+                continue;
+            }
+
+            // Check if all ingredients match
+            bool allIngredientsMatch = true;
+            foreach (string oneIngredient in requiredIngredients)
+            {
+                Debug.Log("THE TRUTH" + oneIngredient);
+                Debug.Log("THE TRUTH" + ingredients[0]);
+                if (!ingredients.Contains(oneIngredient))
                 {
-                    if(!ingredients.Contains(oneIngredient))
-                    {
-                        recipe = "WrongIngredients";
-                        return;
-                    }
+                    allIngredientsMatch = false;
+                    break;
                 }
             }
-            
-            recipe = recipeName;
-            Debug.Log("Recipe found: " + recipe);
-            return;
+
+            if (allIngredientsMatch)
+            {
+                recipe = recipeName;
+                Debug.Log("Recipe found: " + recipe);
+                return true;
+            }
         }
+
         // Si aucune recette n'est trouvée
+        if(ingredients.Count > 0)
+        {
+            recipe = "WrongIngredients";
+            return true;
+        }
+        
         Debug.Log("No matching recipe found.");
-    }*/
+        return false;
+    }
+
+    public GameObject PickUpRecipe()
+    {
+        if(recipe != null)
+        {
+            Debug.Log("You picked up the recipe: " + recipe);
+            return Resources.Load<GameObject>("Recipes/" + recipe);
+        }
+        return null;
+    }
+
+    public void ClearMachine()
+    {
+        ingredients.Clear();
+    }
+
+    public void UseTrash(GameObject ingredient)
+    {
+        Debug.Log("You put " + ingredient.name + " in the trash");
+        Destroy(ingredient);
+    }
 }
+
