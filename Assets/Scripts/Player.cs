@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -120,24 +121,26 @@ public class Player : MonoBehaviour
                 CreatePrefab(food);
 
             if(interactiveGameObject != null)
-            {
-                if(!isMoving)
-                {
-                    isMoving = true;
-                }
-                else
-                {
-                    isMoving = false;
-                    float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
-                    interactiveGameObject.transform.position += lastMoveVector * distance;
-                    Vector3 pos = interactiveGameObject.transform.position;
-                    pos.y = 1 + interactiveGameObject.transform.localScale.y;
-                    interactiveGameObject.transform.position = pos;
-                    prefab = null;
-                    interactiveGameObject = null;
-                }
-            }
+                ToggleMoveObject();
         }
+    }
+
+    private void ToggleMoveObject()
+    {
+        isMoving = !isMoving;
+        
+        if(!isMoving)
+            PlaceObject();
+    }
+
+    private void PlaceObject()
+    {
+        float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
+        interactiveGameObject.transform.position += lastMoveVector * distance;
+        Vector3 pos = interactiveGameObject.transform.position;
+        pos.y = 1 + interactiveGameObject.transform.localScale.y;
+        interactiveGameObject.transform.position = pos;
+        DeleteObject();
     }
 
     /* *** ACTION ON OTHER *** */
@@ -155,6 +158,7 @@ public class Player : MonoBehaviour
                 machine.UseTrash(interactiveGameObject);
             else
                 machine.PutIngredient(interactiveGameObject);
+            DeleteObject();
             isMoving = false;
         }
         else
@@ -175,5 +179,11 @@ public class Player : MonoBehaviour
     {
             interactiveGameObject = Instantiate(prefab);
             interactiveGameObject.transform.SetParent(parent.transform);
+    }
+
+    void DeleteObject()
+    {
+        interactiveGameObject = null;
+        prefab = null;
     }
 }
