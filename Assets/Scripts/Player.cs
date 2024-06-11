@@ -136,6 +136,7 @@ public class Player : MonoBehaviour
 
     private void PlaceObject()
     {
+        Debug.Log("Place object " + interactiveGameObject.name);
         float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
         interactiveGameObject.transform.position += lastMoveVector * distance;
         Vector3 pos = interactiveGameObject.transform.position;
@@ -153,15 +154,25 @@ public class Player : MonoBehaviour
 
     private void UseMachine()
     {
-        Debug.Log("Use machine");
+        //player has an object in hand
         if(isMoving)
         {
+            Debug.Log("Use machine");
+            // if the player wants to throw the object in the trash
             if(string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
+            {
+                interactiveGameObject.tag = "Food";
+                Debug.Log("Use trash " + interactiveGameObject.tag);
                 machine.UseTrash(interactiveGameObject);
-            else
+                DeleteObject();
+                isMoving = false;
+            }
+            else if(interactiveGameObject.tag == "Food")
+            {
                 machine.PutIngredient(interactiveGameObject);
-            DeleteObject();
-            isMoving = false;
+                DeleteObject();
+                isMoving = false;
+            }
         }
         else
         {
