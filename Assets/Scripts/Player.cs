@@ -114,12 +114,16 @@ public class Player : MonoBehaviour
         {
             if(machine != null)
             {
+                Debug.Log("Machine != null");
                 UseMachine();
                 return;
             }
             // To create a prefab
             if(prefab != null && interactiveGameObject == null)
+            {
+                Debug.Log("Pick up prefab" + prefab.name);
                 CreatePrefab(food);
+            }
 
             if(interactiveGameObject != null)
                 ToggleMoveObject();
@@ -176,6 +180,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            Debug.Log("Use machine to take ingredient");
             machine.ReadIngredients();
             if(machine.UseMachine())
             {
