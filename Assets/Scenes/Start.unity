@@ -1031,8 +1031,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabsDataBase:
-  - {fileID: 9205575496180014194, guid: 0ce5635ac68c67e48841aefbee03ec05, type: 3}
-  - {fileID: 4136934413817676754, guid: 6b45be1725d64ea4fabba68d037d4675, type: 3}
+  - {fileID: 1098876932522946691, guid: 6b45be1725d64ea4fabba68d037d4675, type: 3}
+  - {fileID: 3993704875893601315, guid: 0ce5635ac68c67e48841aefbee03ec05, type: 3}
   food: {fileID: 1661313147}
 --- !u!54 &967064162
 Rigidbody:
