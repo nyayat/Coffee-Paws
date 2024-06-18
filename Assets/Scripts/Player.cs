@@ -35,10 +35,10 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position+moveVector, Time.fixedDeltaTime * speed);
+        Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position + moveVector, Time.fixedDeltaTime * speed);
         rigidbody.MovePosition(smoothedDelta);
 
-        if(isMoving)
+        if (isMoving)
         {
             MoveObject();
         }
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
         input.Enable();
         input.Player.Move.performed += MovePerformed;
         input.Player.Move.canceled += MoveCanceled;
-    }   
+    }
 
     private void OnDisable()
     {
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
         {
             case "Food":
             case "Recipe":
-                if(interactiveGameObject == null)
+                if (interactiveGameObject == null)
                     interactiveGameObject = other.gameObject;
                 break;
             case "Box":
@@ -98,34 +98,34 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Player exit in " + other.name);
         // if a player have not an object in hand
-        if(!isMoving && interactiveGameObject != null)
+        if (!isMoving && interactiveGameObject != null)
         {
             Debug.Log("Object null " + interactiveGameObject.name);
             interactiveGameObject = null;
             prefab = null;
         }
-        if(machine != null)
+        if (machine != null)
             machine = null;
     }
 
     public void OnPickUp(InputAction.CallbackContext ctx)
     {
-        if(ctx.performed)
+        if (ctx.performed)
         {
-            if(machine != null)
+            if (machine != null)
             {
                 Debug.Log("Machine != null");
                 UseMachine();
                 return;
             }
             // To create a prefab
-            if(prefab != null && interactiveGameObject == null)
+            if (prefab != null && interactiveGameObject == null)
             {
                 Debug.Log("Pick up prefab" + prefab.name);
                 CreatePrefab(food);
             }
 
-            if(interactiveGameObject != null)
+            if (interactiveGameObject != null)
                 ToggleMoveObject();
         }
     }
@@ -133,15 +133,15 @@ public class Player : MonoBehaviour
     private void ToggleMoveObject()
     {
         isMoving = !isMoving;
-        
-        if(!isMoving)
+
+        if (!isMoving)
             PlaceObject();
     }
 
     private void PlaceObject()
     {
         Debug.Log("Place object " + interactiveGameObject.name);
-        float distance = transform.localScale.x/2 + interactiveGameObject.transform.localScale.x/2 + 0.5f;
+        float distance = transform.localScale.x / 2 + interactiveGameObject.transform.localScale.x / 2 + 0.5f;
         interactiveGameObject.transform.position += lastMoveVector * distance;
         Vector3 pos = interactiveGameObject.transform.position;
         //pos.y = interactiveGameObject.transform.localScale.y;
@@ -159,11 +159,11 @@ public class Player : MonoBehaviour
     private void UseMachine()
     {
         //player has an object in hand
-        if(isMoving)
+        if (isMoving)
         {
             Debug.Log("Use machine");
             // if the player wants to throw the object in the trash
-            if(string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
             {
                 interactiveGameObject.tag = "Food";
                 Debug.Log("Use trash " + interactiveGameObject.tag);
@@ -171,7 +171,7 @@ public class Player : MonoBehaviour
                 DeleteObject();
                 isMoving = false;
             }
-            else if(interactiveGameObject.tag == "Food")
+            else if (interactiveGameObject.tag == "Food")
             {
                 machine.PutIngredient(interactiveGameObject);
                 DeleteObject();
@@ -182,7 +182,7 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Use machine to take ingredient");
             machine.ReadIngredients();
-            if(machine.UseMachine())
+            if (machine.UseMachine())
             {
                 interactiveGameObject = null;
                 prefab = machine.PickUpRecipe();
@@ -195,8 +195,8 @@ public class Player : MonoBehaviour
 
     void CreatePrefab(GameObject parent)
     {
-            interactiveGameObject = Instantiate(prefab);
-            interactiveGameObject.transform.SetParent(parent.transform);
+        interactiveGameObject = Instantiate(prefab);
+        interactiveGameObject.transform.SetParent(parent.transform);
     }
 
     void DeleteObject()
