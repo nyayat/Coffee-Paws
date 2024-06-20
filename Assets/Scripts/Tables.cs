@@ -6,8 +6,8 @@ using System.IO;
 public class Tables : MonoBehaviour
 {
     public Transform tables;
-    public int numTable = -1;
-    private List<bool> table_takes = new List<bool>();
+    private static int numTable = -1;
+    private static List<bool> table_takes = new List<bool>();
     // Awake is called before Start
     void Awake()
     {
@@ -24,11 +24,11 @@ public class Tables : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < table_takes.Count; i++)
-        {
-            if (table_takes[i])
-                Debug.Log("La table n°" + (i + 1) + "est prise");
-        }
+        /*   for (int i = 0; i < table_takes.Count; i++)
+          {
+              if (table_takes[i])
+                  Debug.Log("La table n°" + (i + 1) + "est prise");
+          } */
     }
 
     void takeTable(int n)
@@ -50,9 +50,9 @@ public class Tables : MonoBehaviour
 
     public bool reserveTable(int n)
     {
-        Debug.Log("NB DE TABLE  : " + numTable);
-        Debug.Log("LA TAILLE DE TABLE TAKES : " + table_takes.Count);
-        Debug.Log("\n N : " + n);
+        /*  Debug.Log("NB DE TABLE  : " + numTable);
+         Debug.Log("LA TAILLE DE TABLE TAKES : " + table_takes.Count);
+         Debug.Log("\n N : " + n); */
         if (isFree(n))
         {
             takeTable(n);
@@ -64,6 +64,11 @@ public class Tables : MonoBehaviour
     public Transform getTables()
     {
         return tables;
+    }
+
+    public int getNumTable()
+    {
+        return numTable;
     }
 
 

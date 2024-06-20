@@ -8,7 +8,6 @@ public class NPC : MonoBehaviour
 {
 
     public Tables tables;
-    private Transform table;
     private NavMeshAgent agent;
     private int rand;
     private int table_take = -1;
@@ -17,9 +16,11 @@ public class NPC : MonoBehaviour
     void Start()
     {
 
-        rand = UnityEngine.Random.Range(0, tables.numTable);
+        rand = UnityEngine.Random.Range(0, tables.getNumTable());
         Debug.Log(rand);
         agent = GetComponent<NavMeshAgent>();
+
+        if (table_take < 0) this.reserveTable();
     }
 
     void Awake()
@@ -33,7 +34,9 @@ public class NPC : MonoBehaviour
         {
             Debug.Log(tables.GetChild(i));
         } */
-        if (table_take < 0) this.reserveTable();
+
+        Debug.Log("J'AI PRIS LA TABLE " + table_take);
+        Debug.Log("getchild " + tables.getTables().GetChild(table_take).position);
         agent.destination = tables.getTables().GetChild(table_take).position;
     }
 
@@ -47,7 +50,7 @@ public class NPC : MonoBehaviour
             }
             else
             {
-                rand = UnityEngine.Random.Range(0, tables.numTable);
+                rand = UnityEngine.Random.Range(0, tables.getNumTable());
             }
         }
     }
