@@ -143,4 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705ec21febc3e7d419e1ef7f912a1a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tables: {fileID: 6329867781476604610, guid: 81f4a0bb0fe0af24cbed23ab906be127, type: 3}
+  tables: {fileID: 0}

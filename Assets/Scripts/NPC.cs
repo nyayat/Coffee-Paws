@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class NPC : MonoBehaviour
 {
 
-    public Tables tables;
+    private Tables tables;
     private NavMeshAgent agent;
     private int rand;
     private int table_take = -1;
@@ -15,7 +15,7 @@ public class NPC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        tables = FindObjectOfType<Tables>();
         rand = UnityEngine.Random.Range(0, tables.getNumTable());
         Debug.Log(rand);
         agent = GetComponent<NavMeshAgent>();
@@ -53,6 +53,11 @@ public class NPC : MonoBehaviour
                 rand = UnityEngine.Random.Range(0, tables.getNumTable());
             }
         }
+    }
+
+    public void setTables(Tables tables)
+    {
+        this.tables = tables;
     }
 
 }
