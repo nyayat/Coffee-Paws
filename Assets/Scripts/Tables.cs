@@ -1,18 +1,22 @@
-using System.Collections;
+/* using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
+using System.IO; */
 
+using UnityEngine;
+using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.IO;
 public class Tables : MonoBehaviour
 {
     public Transform tables;
     private static int numTable = -1;
-    private static List<bool> table_takes = new List<bool>();
+    private static List<bool> tableTook = new List<bool>();
     // Awake is called before Start
     void Awake()
     {
         numTable = tables.childCount;
-        table_takes = new List<bool>(new bool[numTable]);
+        tableTook = new List<bool>(new bool[numTable]);
     }
 
     // Start is called before the first frame update
@@ -24,49 +28,49 @@ public class Tables : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*   for (int i = 0; i < table_takes.Count; i++)
-          {
-              if (table_takes[i])
-                  Debug.Log("La table n°" + (i + 1) + "est prise");
-          } */
+
     }
 
-    void takeTable(int n)
+    int TakeTable()
     {
-        table_takes[n] = true;
+        int idx = tableTook.IndexOf(false);
+        tableTook[idx] = true;
+        return idx;
     }
 
 
-    void freeTable(int n)
+    void FreeTable(int n)
     {
-        table_takes[n] = false;
+        tableTook[n] = false;
     }
-
-    bool isFree(int n)
+    bool AnyFreeTable()
     {
-
-        return !table_takes[n];
+        return tableTook.Contains(false);
     }
 
-    public bool reserveTable(int n)
+
+    public int BookTable()
     {
         /*  Debug.Log("NB DE TABLE  : " + numTable);
-         Debug.Log("LA TAILLE DE TABLE TAKES : " + table_takes.Count);
+         Debug.Log("LA TAILLE DE TABLE TAKES : " + tableTook.Count);
          Debug.Log("\n N : " + n); */
-        if (isFree(n))
+        if (AnyFreeTable())
         {
-            takeTable(n);
-            return true;
+            int index = TakeTable();
+
+            Debug.Log("La table n°" + index + " est libre");
+            return index;
         }
-        return false;
+        /* Debug.Log("Pas de table libre.."); */
+        return -1;
     }
 
-    public Transform getTables()
+    public Transform GetTables()
     {
         return tables;
     }
 
-    public int getNumTable()
+    public int GetNumTable()
     {
         return numTable;
     }
