@@ -22,7 +22,7 @@ public class BookingState : State
     {
         base.LogicUpdate();
         npc.BookTable();
-        if (npc.GetTableTook() >= 0) stateMachine.ChangeState(npc.walking);
+        if (npc.tableTook >= 0) stateMachine.ChangeState(npc.walking);
 
     }
     public override void PhysicsUpdate()

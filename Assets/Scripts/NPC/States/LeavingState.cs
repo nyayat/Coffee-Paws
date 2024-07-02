@@ -1,29 +1,32 @@
 public class LeavingState : State
 {
-    public LeavingState(NPC _npc, StateMachine _stateMachine) : base(_npc, _stateMachine) { }
-    public override void Enter()
-    {
-        base.Enter();
-    }
+	public LeavingState(NPC _npc, StateMachine _stateMachine) : base(_npc, _stateMachine) { }
+	public override void Enter()
+	{
+		base.Enter();
+		npc.FreeTable();
+	}
 
-    public override void Exit()
-    {
-        base.Exit();
-    }
+	public override void Exit()
+	{
+		base.Exit();
+	}
 
-    public override void HandleInput()
-    {
+	public override void HandleInput()
+	{
 
-        base.HandleInput();
-    }
+		base.HandleInput();
+	}
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+	public override void LogicUpdate()
+	{
+		base.LogicUpdate();
 
-    }
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
-    }
+		npc.GoodBye();
+		if (npc.Arrived()) { }
+	}
+	public override void PhysicsUpdate()
+	{
+		base.PhysicsUpdate();
+	}
 }

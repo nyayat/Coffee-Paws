@@ -9,14 +9,23 @@ using System.Collections.Generic;
 using System.IO;
 public class Tables : MonoBehaviour
 {
-    public Transform tables;
-    private static int numTable = -1;
-    private static List<bool> tableTook = new List<bool>();
+    public Transform tables
+    {
+        get { return m_tables; }
+    }
+    public Transform m_tables;
+
+    public static int numTable
+    {
+        get { return m_numTable; }
+    }
+    private static int m_numTable = -1;
+    private static List<bool> m_tableTook = new List<bool>();
     // Awake is called before Start
     void Awake()
     {
-        numTable = tables.childCount;
-        tableTook = new List<bool>(new bool[numTable]);
+        m_numTable = m_tables.childCount;
+        m_tableTook = new List<bool>(new bool[m_numTable]);
     }
 
     // Start is called before the first frame update
@@ -33,27 +42,24 @@ public class Tables : MonoBehaviour
 
     int TakeTable()
     {
-        int idx = tableTook.IndexOf(false);
-        tableTook[idx] = true;
+        int idx = m_tableTook.IndexOf(false);
+        m_tableTook[idx] = true;
         return idx;
     }
 
 
-    void FreeTable(int n)
+    public void FreeTable(int n)
     {
-        tableTook[n] = false;
+        m_tableTook[n] = false;
     }
     bool AnyFreeTable()
     {
-        return tableTook.Contains(false);
+        return m_tableTook.Contains(false);
     }
 
 
     public int BookTable()
     {
-        /*  Debug.Log("NB DE TABLE  : " + numTable);
-         Debug.Log("LA TAILLE DE TABLE TAKES : " + tableTook.Count);
-         Debug.Log("\n N : " + n); */
         if (AnyFreeTable())
         {
             int index = TakeTable();
@@ -65,15 +71,7 @@ public class Tables : MonoBehaviour
         return -1;
     }
 
-    public Transform GetTables()
-    {
-        return tables;
-    }
 
-    public int GetNumTable()
-    {
-        return numTable;
-    }
 
 
 }

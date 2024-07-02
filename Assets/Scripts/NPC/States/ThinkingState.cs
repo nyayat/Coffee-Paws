@@ -21,6 +21,7 @@ public class ThinkingState : State
     {
         base.LogicUpdate();
         npc.Think();
+        stateMachine.ChangeState(npc.waiting);
 
     }
     public override void PhysicsUpdate()

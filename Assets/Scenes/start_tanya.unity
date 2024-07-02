@@ -529,6 +529,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: table_2
       objectReference: {fileID: 0}
+    - target: {fileID: 6329867781476604610, guid: 81f4a0bb0fe0af24cbed23ab906be127, type: 3}
+      propertyPath: m_tables
+      value: 
+      objectReference: {fileID: 1896372140}
     - target: {fileID: 6556263672349109810, guid: 81f4a0bb0fe0af24cbed23ab906be127, type: 3}
       propertyPath: m_Name
       value: Tables
