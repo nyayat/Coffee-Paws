@@ -6,14 +6,13 @@ public class WheelButtonController : MonoBehaviour
 {
 	public int id;
 	private Animator anim;
-	public static Image selectedItem;
+	public Image selectedItem;
 	private bool selected = false;
 	public Sprite icon;
 	// Start is called before the first frame update
 	void Start()
 	{
 		anim = GetComponent<Animator>();
-		icon = GetComponent<Sprite>();
 
 	}
 

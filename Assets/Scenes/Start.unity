@@ -1709,7 +1709,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  icon: {fileID: 0}
+  selectedItem: {fileID: 972120375}
+  icon: {fileID: 21300000, guid: 4e68d91a2ebc358479046f73ba2cd26f, type: 3}
 --- !u!1 &1102886520
 GameObject:
   m_ObjectHideFlags: 0
@@ -1981,6 +1982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
+  selectedItem: {fileID: 972120375}
   icon: {fileID: 21300000, guid: cb834ed0a49c53e4ca6c873335a43868, type: 3}
 --- !u!95 &1154055395
 Animator:
@@ -2217,7 +2219,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
-  icon: {fileID: 0}
+  selectedItem: {fileID: 972120375}
+  icon: {fileID: 21300000, guid: 38830dc07e7d4b64c8708c4db2763546, type: 3}
 --- !u!95 &1180851509
 Animator:
   serializedVersion: 5

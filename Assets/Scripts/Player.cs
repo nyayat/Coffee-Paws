@@ -7,201 +7,203 @@ using System.Linq;
 
 public class Player : MonoBehaviour
 {
-    /* *** PUBLIC *** */
-    public GameObject[] prefabsDataBase;
-    public GameObject food;
-    /* *** PRIVATE *** */
-    private CustomInput input = null;
-    private Vector3 moveVector = Vector3.zero;
-    private Vector3 lastMoveVector = Vector3.zero;
-    private Rigidbody rigidbody = null;
-    private float speed = 4.0f;
-    private GameObject interactiveGameObject = null;
-    private float heightPlayer = 0f;
-    private bool isMoving = false;
-    private GameObject prefab = null;
-    private Machine machine = null;
+	/* *** PUBLIC *** */
+	public GameObject[] prefabsDataBase;
+	public GameObject food;
+	/* *** PRIVATE *** */
+	private CustomInput input = null;
+	private Vector3 moveVector = Vector3.zero;
+	private Vector3 lastMoveVector = Vector3.zero;
+	private Rigidbody rigidbody = null;
+	private float speed = 4.0f;
+	private GameObject interactiveGameObject = null;
+	private float heightPlayer = 0f;
+	private bool isMoving = false;
+	private GameObject prefab = null;
+	private Machine machine = null;
 
-    private void Awake()
-    {
-        input = new CustomInput();
-        rigidbody = GetComponent<Rigidbody>();
-    }
+	private void Awake()
+	{
+		input = new CustomInput();
+		rigidbody = GetComponent<Rigidbody>();
+	}
 
-    private void Start()
-    {
-        heightPlayer = transform.localScale.y;
-    }
+	private void Start()
+	{
+		heightPlayer = transform.localScale.y;
+	}
 
-    private void FixedUpdate()
-    {
-        Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position + moveVector, Time.fixedDeltaTime * speed);
-        rigidbody.MovePosition(smoothedDelta);
+	private void FixedUpdate()
+	{
+		Vector3 smoothedDelta = Vector3.MoveTowards(rigidbody.position, rigidbody.position + moveVector, Time.fixedDeltaTime * speed);
+		rigidbody.MovePosition(smoothedDelta);
 
-        if (isMoving)
-        {
-            MoveObject();
-        }
-    }
+		if (isMoving)
+		{
+			MoveObject();
+		}
+	}
 
-    private void OnEnable()
-    {
-        input.Enable();
-        input.Player.Move.performed += MovePerformed;
-        input.Player.Move.canceled += MoveCanceled;
-    }
+	private void OnEnable()
+	{
+		input.Enable();
+		input.Player.Move.performed += MovePerformed;
+		input.Player.Move.canceled += MoveCanceled;
+	}
 
-    private void OnDisable()
-    {
-        input.Disable();
-        input.Player.Move.performed -= MovePerformed;
-        input.Player.Move.canceled -= MoveCanceled;
-    }
+	private void OnDisable()
+	{
+		input.Disable();
+		input.Player.Move.performed -= MovePerformed;
+		input.Player.Move.canceled -= MoveCanceled;
+	}
 
-    private void MovePerformed(InputAction.CallbackContext value)
-    {
-        Vector2 direction = value.ReadValue<Vector2>();
-        moveVector = new Vector3(direction.x, 0, direction.y);
-        lastMoveVector = moveVector;
-    }
+	private void MovePerformed(InputAction.CallbackContext value)
+	{
+		Vector2 direction = value.ReadValue<Vector2>();
+		moveVector = new Vector3(direction.x, 0, direction.y);
+		lastMoveVector = moveVector;
+	}
 
-    private void MoveCanceled(InputAction.CallbackContext value)
-    {
-        moveVector = Vector3.zero;
-    }
+	private void MoveCanceled(InputAction.CallbackContext value)
+	{
+		moveVector = Vector3.zero;
+	}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Player enter in " + other.name);
-        switch (other.tag)
-        {
-            case "Food":
-            case "Recipe":
-                if (interactiveGameObject == null)
-                    interactiveGameObject = other.gameObject;
-                break;
-            case "Box":
-                prefab = prefabsDataBase.FirstOrDefault(p => p.name == other.name);
-                Debug.Log("Prefab found " + prefab.name);
-                if (prefab == null)
-                    Debug.LogWarning("Prefab with name " + other.tag + " not found in prefabs array.");
-                break;
-            case "Machine":
-                machine = other.gameObject.GetComponent<Machine>();
-                break;
-            default:
-                break;
-        }
-    }
+	private void OnTriggerEnter(Collider other)
+	{
+		Debug.Log("Player enter in " + other.name);
+		switch (other.tag)
+		{
+			case "Food":
+			case "Recipe":
+				if (interactiveGameObject == null)
+					interactiveGameObject = other.gameObject;
+				break;
+			case "Box":
+				prefab = prefabsDataBase.FirstOrDefault(p => p.name == other.name);
+				Debug.Log("Prefab found " + prefab.name);
+				if (prefab == null)
+					Debug.LogWarning("Prefab with name " + other.tag + " not found in prefabs array.");
+				break;
+			case "Machine":
+				machine = other.gameObject.GetComponent<Machine>();
+				break;
+			default:
+				break;
+		}
+	}
 
-    private void OnTriggerExit(Collider other)
-    {
-        Debug.Log("Player exit in " + other.name);
-        // if a player have not an object in hand
-        if (!isMoving && interactiveGameObject != null)
-        {
-            Debug.Log("Object null " + interactiveGameObject.name);
-            interactiveGameObject = null;
-            prefab = null;
-        }
-        if (machine != null)
-            machine = null;
-    }
+	private void OnTriggerExit(Collider other)
+	{
+		Debug.Log("Player exit in " + other.name);
+		// if a player have not an object in hand
+		if (!isMoving && interactiveGameObject != null)
+		{
+			Debug.Log("Object null " + interactiveGameObject.name);
+			interactiveGameObject = null;
+			prefab = null;
+		}
+		if (machine != null)
+			machine = null;
+	}
 
-    public void OnPickUp(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed)
-        {
-            if (machine != null)
-            {
-                Debug.Log("Machine != null");
-                UseMachine();
-                return;
-            }
-            // To create a prefab
-            if (prefab != null && interactiveGameObject == null)
-            {
-                Debug.Log("Pick up prefab" + prefab.name);
-                CreatePrefab(food);
-            }
+	public void OnPickUp(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			if (machine != null)
+			{
+				Debug.Log("Machine != null");
+				UseMachine();
+				return;
+			}
+			// To create a prefab
+			if (prefab != null && interactiveGameObject == null)
+			{
+				Debug.Log("Pick up prefab" + prefab.name);
+				CreatePrefab(food);
+			}
 
-            if (interactiveGameObject != null)
-                ToggleMoveObject();
-        }
-    }
+			if (interactiveGameObject != null)
+				ToggleMoveObject();
+		}
+	}
 
-    private void ToggleMoveObject()
-    {
-        isMoving = !isMoving;
+	private void ToggleMoveObject()
+	{
+		isMoving = !isMoving;
 
-        if (!isMoving)
-            PlaceObject();
-    }
+		if (!isMoving)
+			PlaceObject();
+	}
 
-    private void PlaceObject()
-    {
-        Debug.Log("Place object " + interactiveGameObject.name);
-        float distance = transform.localScale.x / 2 + interactiveGameObject.transform.localScale.x / 2 + 0.5f;
-        interactiveGameObject.transform.position += lastMoveVector * distance;
-        Vector3 pos = interactiveGameObject.transform.position;
-        //pos.y = interactiveGameObject.transform.localScale.y;
-        pos.y = 1.2f;
-        interactiveGameObject.transform.position = pos;
-        DeleteObject();
-    }
+	private void PlaceObject()
+	{
+		Debug.Log("Place object " + interactiveGameObject.name);
+		float distance = transform.localScale.x / 2 + interactiveGameObject.transform.localScale.x / 2 + 0.5f;
+		interactiveGameObject.transform.position += lastMoveVector * distance;
+		Vector3 pos = interactiveGameObject.transform.position;
+		//pos.y = interactiveGameObject.transform.localScale.y;
+		pos.y = 1.2f;
+		interactiveGameObject.transform.position = pos;
+		DeleteObject();
+	}
 
-    /* *** ACTION ON OTHER *** */
-    private void MoveObject()
-    {
-        interactiveGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + heightPlayer, transform.position.z);
-    }
+	/* *** ACTION ON OTHER *** */
+	private void MoveObject()
+	{
+		interactiveGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + heightPlayer, transform.position.z);
+	}
 
-    private void UseMachine()
-    {
-        //player has an object in hand
-        if (isMoving)
-        {
-            Debug.Log("Use machine");
-            // if the player wants to throw the object in the trash
-            if (string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
-            {
-                interactiveGameObject.tag = "Food";
-                Debug.Log("Use trash " + interactiveGameObject.tag);
-                machine.UseTrash(interactiveGameObject);
-                DeleteObject();
-                isMoving = false;
-            }
-            else if (interactiveGameObject.tag == "Food")
-            {
-                machine.PutIngredient(interactiveGameObject);
-                DeleteObject();
-                isMoving = false;
-            }
-        }
-        else
-        {
-            Debug.Log("Use machine to take ingredient");
-            machine.ReadIngredients();
-            if (machine.UseMachine())
-            {
-                interactiveGameObject = null;
-                prefab = machine.PickUpRecipe();
-                machine.ClearMachine();
-                CreatePrefab(food);
-                isMoving = true;
-            }
-        }
-    }
+	private void UseMachine()
+	{
+		//player has an object in hand
+		if (isMoving)
+		{
+			Debug.Log("Use machine");
+			// if the player wants to throw the object in the trash
+			if (string.Equals(machine.name, "trash", StringComparison.OrdinalIgnoreCase))
+			{
+				interactiveGameObject.tag = "Food";
+				Debug.Log("Use trash " + interactiveGameObject.tag);
+				machine.UseTrash(interactiveGameObject);
+				DeleteObject();
+				isMoving = false;
+			}
+			else if (interactiveGameObject.tag == "Food")
+			{
 
-    void CreatePrefab(GameObject parent)
-    {
-        interactiveGameObject = Instantiate(prefab);
-        interactiveGameObject.transform.SetParent(parent.transform);
-    }
+				Debug.Log("interactiveGameObject.tag == Food");
+				machine.PutIngredient(interactiveGameObject);
+				DeleteObject();
+				isMoving = false;
+			}
+		}
+		else
+		{
+			Debug.Log("Use machine to take ingredient");
+			machine.ReadIngredients();
+			if (machine.UseMachine())
+			{
+				interactiveGameObject = null;
+				prefab = machine.PickUpRecipe();
+				machine.ClearMachine();
+				CreatePrefab(food);
+				isMoving = true;
+			}
+		}
+	}
 
-    void DeleteObject()
-    {
-        interactiveGameObject = null;
-        prefab = null;
-    }
+	void CreatePrefab(GameObject parent)
+	{
+		interactiveGameObject = Instantiate(prefab);
+		interactiveGameObject.transform.SetParent(parent.transform);
+	}
+
+	void DeleteObject()
+	{
+		interactiveGameObject = null;
+		prefab = null;
+	}
 }

@@ -12,13 +12,13 @@ public class Machine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PutIngredient(GameObject ingredient)
@@ -46,7 +46,7 @@ public class Machine : MonoBehaviour
         foreach (string line in lines)
         {
             // Split the line by comma
-            string[] parts = line.Split(',');
+            string[] parts = line.Split(';');
 
             // Check if the line is valid and has the necessary parts
             if (parts.Length < 3)
@@ -89,19 +89,19 @@ public class Machine : MonoBehaviour
         }
 
         // Si aucune recette n'est trouvée
-        if(ingredients.Count > 0)
+        if (ingredients.Count > 0)
         {
             recipe = "WrongIngredients";
             return true;
         }
-        
+
         Debug.Log("No matching recipe found.");
         return false;
     }
 
     public GameObject PickUpRecipe()
     {
-        if(recipe != null)
+        if (recipe != null)
         {
             Debug.Log("You picked up the recipe: " + recipe);
             return Resources.Load<GameObject>("Recipes/" + recipe);

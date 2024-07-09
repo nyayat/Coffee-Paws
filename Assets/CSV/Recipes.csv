@@ -1,2 +1,18 @@
-Kitchenaid,Flour Butter,DoughBase
-Oven,DoughBase,Croissant
+Kitchenaid;Flour Butter;CroissantBase
+Oven;CroissantBase;Croissant
+Kitchenaid;Flour Butter Chocolate;PainAuChocolatBase
+Oven;PainAuChocolatBase;PainAuChocolat
+Kitchenaid;Flour Butter Sugar Cinnamon;CinnamonRollBase
+Oven;CinnamonRollBase;CinnamonRoll
+Kitchenaid;Flour Butter Sugar;PancakeBase
+Oven;PancakeBase;Pancake
+Kitchenaid;Flour Butter Sugar Strawberry;StrawberryCakeBase
+Oven;StrawberryCakeBase;StrawberryCake
+Kitchenaid;Bread Cream Strawberry;StrawberryBreadBase
+Oven;StrawberryBreadBase;StrawberryBread
+Kitchenaid;Flour Butter Sugar Blueberry;BlueberryCupcakeBase
+Oven;BlueberryCupcakeBase;BlueberryCupcake
+Kitchenaid;Flour Butter Sugar Sugar;BriocheBase
+Oven;BriocheBase;Brioche
+Kitchenaid;Flour Butter Sugar Sugar;TarteletteBase
+Oven;TarteletteBase;Tartelette

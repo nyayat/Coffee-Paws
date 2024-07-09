@@ -23,7 +23,7 @@ public class LeavingState : State
 		base.LogicUpdate();
 
 		npc.GoodBye();
-		if (npc.Arrived()) { }
+		if (npc.Arrived()) {npc.DestroyNPC(); }
 	}
 	public override void PhysicsUpdate()
 	{

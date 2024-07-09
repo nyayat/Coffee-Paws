@@ -13,6 +13,7 @@ public class WaitingState : State
 
 	public override void Exit()
 	{
+		npc.StopThinking();
 		base.Exit();
 	}
 
